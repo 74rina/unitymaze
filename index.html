@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang = "ja">
+
+
+<head>
+    <title>Unityで迷路を作る</title>
+    <link rel = "stylesheet" href = "style.css">
+    <link rel = "icon" type = "image/png" href = "logo.png">
+    <meta charset="UTF-8">
+</head>
+
+<body>
+
+    <div id = "about" class = "big-bg">
+        <header class = "page-header wrapper">
+            <nav>
+                <h1 class = "tag">#Unity #3D #maze</h1>
+            </nav>
+        </header>
+
+        <div class = "wrapper">
+            <h2 class = "page-title">初心者がUnityで迷路を作ってみた</h2>
+        </div>
+    </div>
+
+    <div class = "project-contents wrapper">
+        <main>
+            <article>
+                <h1 class = two>制作時間は1時間。サクッと作っちゃいましょう！</h1>
+                <p1 class = tt>・・・ちょっとだけUnityを触ったことがある人向け</p1>
+                <p>完成形はこちら（矢印キーで操作）</p>
+                <iframe frameborder="0" id="webgl-frame" scrolling="auto" src="https://object-storage.tyo1.conoha.io/v1/nc_df3bdbc45bc04950b558834f5728517a/unityroom_production/game/27878/webgl/play.html"></iframe>
+                <ul class = "hhh">
+                    <li>１．床をつくる</li>
+                    <li>２．迷路の壁をつくる</li>
+                    <li>３．プレイヤーの設定</li>
+                    <li>４．メインカメラの設定</li>
+                    <li>５．スカイボックスの設定</li>
+                </ul>
+
+
+                <h5>１．床をつくる　　～2min</h5>
+                <p>まず、迷路の土台となる限りなく広い床を作ります。</p>
+                <p>ゲームオブジェクト→3Dオブジェクト→キューブを選択して、インスペクターのスケールを (x,y,z)=(50,1,20)にしておきましょう。</p>
+                <img class = "floor" src = "floor.png" alt = "床" title = "床">
+
+
+                <h5>２．迷路の壁をつくる　　～30min</h5>               
+                <p>先程と同じようにゲームオブジェクトからキューブを選択して、位置やスケールを調整しながら迷路の壁を作っていきます。</p>
+                <p>マテリアル(今回は大理石のテクスチャ)をつけて、こんな感じになりました。</p>
+                <img class = "wall" src = "wall.png" alt = "壁" title = "壁">
+                <p>60個程のオブジェクトが作られましたね。これをまとめるために、ヒエラルキー内を右クリック→「空のオブジェクトを作成」を選択して名前をwallに変更、そのwallに60個の壁オブジェクトをドラッグアンドドロップします。これでヒエラルキーを整理できました。</p>
+
+
+                <h5>３．プレイヤーの設定　　～15min</h5>
+                <p>今回は<a href = "https://assetstore.unity.com/" target = "_blank">Unity Asset Store</a>の<a href = "https://assetstore.unity.com/packages/3d/animations/haon-sd-series-bundle-84992" target="_blank">無料アセット</a>を使います。</p>
+                <img class = "asset" src = "asset.png" alt = "アセット" title = "アセット">
+                <p>自分のプロジェクト画面にキャラクターを持ってきたら、キャラクターの座標を迷路のスタート位置にします。</p>
+                <img class = "locate" src = "locate.png" alt = "配置" title = "配置">
+                <p>次に、プレイヤーのインスペクターでコンポーネントをいくつか設定します。</p>
+                <p>今回追加するコンポーネントは</p>
+                <ul>
+                    <li>Animator・・・アニメーションの追加</li>
+                    <li>Rigidbody・・・物理演算</li>
+                    <li>Capsule Collider・・・衝突判定</li>
+                </ul>
+                <p>※RigidbodyのConstraintsから回転を固定→x,y,zすべてにチェックを入れましょう。</p>
+                <p>追加したCapsule Colliderは、プレイヤーのサイズに合うように中心・半径・高さの値を調節してください。</p>
+                <img class = "collider" src = "collider.png" alt = "値" title = "値">
+                <p>値はだいたいこの位でしょうか。</p>
+                <p>それではプレイヤーを動かすスクリプトを書いていきます。</p>
+                <p>プレイヤーのインスペクターで、「コンポーネントを追加」→「新しいスクリプト」→名前をplayerにして作成したら、Visual Studioを開いてください。</p>
+                <script src="https://gist.github.com/yonepoko/0725f883d96aa06fa4d9d94f44610f38.js"></script>
+                <p>これで、上下矢印キーで進む/戻る、左右キーで回転できるようになりました。</p>
+                <p>次に、プレイヤーにアニメーションを加えましょう。</p>
+                <p>Assets内を右クリックして、作成→「アニメーターコントローラー」を選択し、名前をplayerにしておきます。</p>
+                <p>Assetsに次のアイコンが表示されました。</p>
+                <img class = "animator" src = "animator.png" alt = "アニメーター" title = "アニメーター">
+                <p>このアニメーターコントローラーを、プレイヤーのインスペクターにあるAnimatorの「コントローラー」にドラッグアンドドロップしましょう。</p>
+                <img class = "controller" src = "controller.png" alt = "コントローラー" title = "コントローラー">
+                <p>コントローラーがplayerになりました。それではこのコントローラーの設定をしていきます。</p>
+                <p>Assets内のアニメーターコントローラーをダブルクリックすると、Sceneビューだった場所がアニメーターの画面になりました。</p>
+                <img class = "scene" src = "scene.png" alt = "シーン" title = "シーン">
+                <p>ここを右クリック→「ステートの作成」→「空」を選択すると、EntryとNew Stateが矢印で繋がりました。</p>
+                <img class = "scene" src = "seni.png" alt = "遷移" title = "遷移">
+                <p>New Stateをクリックし、インスペクターのMotionをRunA_front@loopにします。これで走っているアニメーションをつけることができました。</p>
+                <img class = "gif" src = "gif.gif" alt = "gif" title = "gif">
+
+
+                <h5>４．メインカメラの設定　　～10min</h5>
+                <p>今の状態だと、プレイヤーが進んで曲がると画角から外れてしまうので、メインカメラが常にプレイヤーを追うようにしたいと思います。</p>
+                <p>ヒエラルキーのMain Cameraをプレイヤーのオブジェクトにドラッグアンドドロップすることによって、カメラがプレイヤーについていくようになりました。</p>
+                <p>次に、新しいスクリプトを作成→メインカメラとプレイヤーの間に壁があるときその壁を一時的に非表示にするスクリプトを書き、メインカメラのインスペクターに追加します。</p>
+                <script src="https://gist.github.com/yonepoko/85f53cbeff309b8b34aec1aafdcadd9f.js"></script>
+
+
+
+                <h5>５．スカイボックスの設定　　～5min</h5>
+                <p>ゲームの雰囲気を一気に変えてくれる、そんなスカイボックスを設定してみましょう。</p>
+                <p>今回は<a href = "https://assetstore.unity.com/" target = "_blank">Unity Asset Store</a>の<a href = "https://assetstore.unity.com/packages/2d/textures-materials/sky/allsky-free-10-sky-skybox-set-146014" target="_blank">無料アセット</a>を使います。</p>
+                <img class = "scene" src = "allskyfree.png" alt = "sky" title = "sky">
+                <p>この中から、お好みで空模様を選びましょう。</p>
+                <img class = "scene" src = "game.png" alt = "game" title = "game">
+                <p>ゲームの雰囲気が良い感じになりました。</p>
+
+
+                <p class = kansei>迷路の完成！</p>
+                <p>1時間で簡単な3D迷路を作ることができました。</p>
+                <p>最後まで読んでくださりありがとうございました^^</p>
+
+            </article>
+        </main>
+        
+    
+    
+    
+        <aside>
+            <h4 class = "sub-title">Social Media</h4>
+            <h1><a href="https://twitter.com/yonepoko_" target="_blank"><img class = "twitter" src = "twitter.png" alt = "twitter"></a></h1>
+            <h1><a href="https://www.youtube.com/channel/UC70EL-p8NzE8jpFcwPWf3rw" target="_blank"><img class = "youtube" src = "youtube.png" alt = "youtube"></a></h1>
+            <h4 class = "sub-title">Others</h4>
+            <h2 class = "scratch"><a href = "https://scratch.mit.edu/users/yonepoko/" target = "_blank">Scratch</a></h2>
+            <h2 class = "scratch"><a href = "https://github.com/yonepoko" target = "_blank">GitHub</a></h2>
+            <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSebfj0h3sNwBygSczdnzU7ffwy68sTADtJnwAy96qDTYbMXEA/viewform?embedded=true" width="260" height="700" frameborder="0" marginheight="0" marginwidth="0">読み込んでいます…</iframe>
+        </aside>
+
+    </div>
+
+
+    <div class = "fo">
+        <footer>
+            <div class = "wrapper">
+                <p><small>&copy;2022 yonepoko</small></p>
+            </div>
+        </footer>
+    </div>
+
+</body>
